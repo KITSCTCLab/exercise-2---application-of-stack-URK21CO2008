@@ -1,36 +1,117 @@
-# Problem
-Implement a program to validate and evaluate a postfix expression..
-
-# Input
-The input will be a valid or invalid postfix string. The expression consists of only integers and binary operators ("+","-","*","/","^"). There will not be any division by zero operation.</br>
-Every integer and operator will be separated by a SPACE. 
-
-The idea is to traverse the given expression from left to right. If the current character of the expression is an operand, push it into the stack; otherwise, if the current character is an operator, pop the top two elements from the stack, evaluate them using the current operator and push the result back into the stack. When all the expression characters are processed, we will be left with only one element in the stack containing the value of a postfix expression.
-
-# Constraints
-NA
+class Evaluate:
+  """This class validates and evaluate postfix expression.
+  Attributes:
+      top: An integer which denotes the index of the element at the top of the stack currently.
+      size_of_stack: An integer which represents the size of stack.
+      stack: A List which acts as a Stack.
+  """
+    # Write your code here
 
 
-# Sample Input-0
-2 3 1 * + 9 -
+  def __init__(self, size):
+    """Inits Evaluate with top, size_of_stack and stack.
+    Arguments:
+      size_of_stack: An integer to set the size of stack.
+    """
+    self.top = -1
+    self.size_of_stack = size
+    self.stack = []
 
-# Sample Output-0
--4
 
-# Sample Input-1
-1 2 3 + * 8 -
+  def isEmpty(self):
+    """
+    Check whether the stack is empty.
+    Returns:
+      True if it is empty, else returns False.
+    """
+      # Write your code here
+    if len(self.stack) == 0:
+        return True
+    else:
+        return False
 
-# Sample Output-1
--3
 
-# Sample Input-2
-31 4 50 + * 
+  def pop(self):
+    """
+    Do pop operation if the stack is not empty.
+    Returns:
+      The data which is popped out if the stack is not empty.
+    """
+    # Write your code here
+    if len(self.stack) > 0:
+        x = self.stack.pop()
+        return x
 
-# Sample Output-2
-1674
 
-# Sample Input-3
-31 4 50 5 * *
+  def push(self, operand):
+    """
+    Push the operand to stack if the stack is not full.
+    Arguments:
+      operand: The operand to be pushed.
+    """
+    # Write your code here
+    self.stack.append(operand)
 
-# Sample Output-3
-Invalid postfix expression
+
+  def validate_postfix_expression(self, expression):
+    """
+    Check whether the expression is a valid postfix expression.
+    Arguments:
+      expression: A String which represents the expression to be validated.
+    Returns:
+      True if the expression is valid, else returns False.
+    """
+    # Write your code here
+    value = True
+    
+    valid = ['+','-','*','/']
+    
+    for char in expression:
+        if char.isdigit or char in valid:
+            continue
+        else:
+            value = False
+    
+    return value
+
+
+  def evaluate_postfix_expression(self, expression):
+    """
+    Evaluate the postfix expression
+    Arguments:
+      expression: A String which represents the the expression to be evaluated
+    Returns:
+      The result of evaluated postfix expression.
+    """
+    
+    # Write your code here
+    
+    for char in expression:
+        if char.isdigit():
+            self.push(char)
+        else:
+            b = int(self.pop())
+            a = int(self.pop())
+            
+            if char == "+":
+                result = a + b
+            elif char == "-":
+                result = a - b
+            elif char == '*':
+                result = a * b
+            elif char == '/':
+                result = a / b
+            
+            self.push(result)
+    
+    return int(self.stack[0])
+
+
+# Do not change the following code
+postfix_expression = input()  # Read postfix expression
+tokens = postfix_expression.split()
+evaluate = Evaluate(len(tokens))
+if evaluate.validate_postfix_expression(tokens):
+    print(evaluate.evaluate_postfix_expression(tokens))
+else:
+    print('Invalid postfix expression')
